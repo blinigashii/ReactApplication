@@ -1,9 +1,20 @@
 using Persistence;
 using Microsoft.EntityFrameworkCore;
+using MediatR;
+using System.Collections.Generic;
+using Application.Activities;
+using System.Reflection;
+using AutoMapper;
+using Application.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddMediatR(typeof(List.Handler).Assembly);
+
+builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+
 builder.Services.AddCors(c =>
 {
     c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
@@ -25,6 +36,8 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<DataContext>();    
     context.Database.Migrate();
 }
+
+
 
 
 
